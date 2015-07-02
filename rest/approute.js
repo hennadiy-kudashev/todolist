@@ -7,8 +7,8 @@ var itemRepository = new ItemRepository();
 exports.register = function(app) {
 	router.route('/todo')
 		.get(function(request, response) {
-			var items = itemRepository.getAll();
-			response.json(items);
+			response.sendfile('index.html');
 		});
 	app.use('/api', router);
+	app.use('/api', express.static('public'));
 };
