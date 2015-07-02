@@ -10,7 +10,12 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 var port = process.env.PORT || 3000;
 
-var route = require('./rest/approute');
-route.register(app);
+var rest = require('./rest/rest');
+rest.register(app);
+
+app.use(express.static('public'));
+app.get('/', function (request, response) {
+	response.sendfile('public/index.html');
+});
 
 app.listen(port);

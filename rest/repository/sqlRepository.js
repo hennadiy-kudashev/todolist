@@ -1,11 +1,11 @@
 var sql = require('mssql'); 
 
 var config = {
-    user: '...',
-    password: '...',
-    server: 'localhost', // You can use 'localhost\\instance' to connect to named instance
-    database: '...'    
-}
+    user: '1gb_banzaj-ra',
+    password: 'bfee2e68',
+    server: 'mssql3.1gb.ua',
+    database: '1gb_todo'
+};
 
 var SqlRepository = function(){
 
@@ -19,6 +19,6 @@ SqlRepository.prototype.query = function(query, resultCallback){
 	        resultCallback(recordset);
 	    });
 	});	
-}
+};
 
 module.exports = SqlRepository;
