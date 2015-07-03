@@ -57,6 +57,10 @@ URI               | Method      | Type
 ----              | ----        | -----
 /api/todo | POST 		  | application/json
 
+    {
+    	"title": "The new goal for this week"
+    }
+
 ### Response 204
 
 ### Response 500
