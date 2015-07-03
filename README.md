@@ -1,5 +1,5 @@
 # REST
-## 1. Get TODO list
+## 1. Get TODO list.
 
 ### Request
 
@@ -7,7 +7,7 @@ URI               | Method      | Type
 ----              | ----        | -----
 /api/todo | GET 		  | application/json
 
-### Response
+### Response 200
 
     [
       {
@@ -41,3 +41,27 @@ URI               | Method      | Type
         "isDone": false
       }
     ]
+
+### Response 500
+    {
+        "name": "ConnectionError",
+        "message": "Login failed for user 'barada'.",
+        "code": "ELOGIN"
+    }
+
+## 2. Create an item for TODO list.
+
+### Request
+
+URI               | Method      | Type
+----              | ----        | -----
+/api/todo | POST 		  | application/json
+
+### Response 204
+
+### Response 500
+    {
+        "name": "ConnectionError",
+        "message": "Login failed for user 'barada'.",
+        "code": "ELOGIN"
+    }

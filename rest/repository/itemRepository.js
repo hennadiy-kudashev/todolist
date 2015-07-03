@@ -1,28 +1,42 @@
 var SqlRepository = require('./sqlRepository');
 var Item = require('./../model/item');
 
-var ItemRepository = function() {
+var ItemRepository = function () {
 
 };
-
 ItemRepository.prototype = new SqlRepository();
 
-ItemRepository.prototype.getAll = function(resultCallback) {
-	this.query('SELECT ID, Title, IsDone FROM dbo.Item;',function(resultset){
-		var resultArray = [];
-		resultset.forEach(function(item){
-			resultArray.push(new Item(item.ID, item.Title, item.IsDone))
-		});
-		resultCallback(resultArray);
-	});
-	/*return [
-		new Item(1, 'Create a to-do list1', true),
-		new Item(2, 'Take down Christmas tree', false),
-		new Item(3, 'Learn Ember.js', false),
-		new Item(4, 'Binge watch every episode of MacGyver', false),
-		new Item(5, 'Alphabetize everything in the fridge', false),
-		new Item(6, 'Do 10 pull-ups without dropping', false),
-	];*/
+/**
+ * Returns all items.
+ * @param resultCallback function(error, Item[] items)
+ */
+ItemRepository.prototype.getAll = function (resultCallback) {
+    this.query('SELECT ID, Title, IsDone FROM dbo.Item;', function (error, resultset) {
+        var resultArray = [];
+        if (resultset) {
+            resultset.forEach(function (item) {
+                resultArray.push(new Item(item.ID, item.Title, item.IsDone))
+            });
+        }
+        resultCallback(error, resultArray);
+    });
+};
+
+/**
+ * Adds new Item entry to repository.
+ * @param item {Item}
+ * @param completeCallback function(error) which calls when operation is completed.
+ */
+ItemRepository.prototype.create = function (item, completeCallback) {
+    this.queryWithParams(
+        'INSERT INTO dbo.Item(Title, IsDone) VALUES (@Title, @IsDone);',
+        [
+            {name: 'Title', value: item.title},
+            {name: 'IsDone', value: item.isDone}
+        ],
+        function (error, resultset) {
+            completeCallback(error);
+        });
 };
 
 module.exports = ItemRepository;
