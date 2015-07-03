@@ -1,5 +1,5 @@
-var SqlRepository = require('./sqlRepository');
-var Item = require('./../model/item');
+var SqlRepository = rootRequire('rest/repository/sqlRepository');
+var Item = rootRequire('rest/model/item');
 
 var ItemRepository = function () {
 

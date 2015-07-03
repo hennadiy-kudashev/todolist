@@ -7,7 +7,11 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json()); //for parsing application/json
 app.use(bodyParser.urlencoded({	extended: true})); //for parsing application/x-www-form-urlencoded
 
-var rest = require('./rest/rest');
+global.rootRequire = function(name) {
+	return require(__dirname + '/' + name);
+}
+
+var rest = rootRequire('rest/rest');
 rest.register(app);
 
 app.use(express.static('public'));
