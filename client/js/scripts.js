@@ -6,6 +6,7 @@ var Todo = React.createClass({
 	componentDidMount: function() {
 		$.ajax({
 			url: 'api/todo',
+			contentType: 'application/json',
 			success: function(data) {
 				this.setState({data: data});
 			}.bind(this)

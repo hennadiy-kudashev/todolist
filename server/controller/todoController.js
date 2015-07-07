@@ -1,4 +1,4 @@
-var ItemRepository = rootRequire('rest/repository/itemRepository');
+var ItemRepository = rootRequire('repository/itemRepository');
 var itemRepository = new ItemRepository();
 
 exports.redirect = function (router) {
@@ -14,7 +14,7 @@ exports.redirect = function (router) {
         })
         .post(function (request, response) {
             var payload = request.body;
-            var Item = rootRequire('rest/model/item');
+            var Item = rootRequire('model/item');
             var item = new Item(undefined, payload.title, false);
 
             itemRepository.create(item, function (error) {
