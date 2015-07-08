@@ -23,9 +23,21 @@ var Todo = React.createClass({
 		return (
 			<div className="Todo">
 				<h1>Todo List</h1>
+				<AddTodoField />
 				<div className="items">
 					{todoNodes}
 				</div>
+				<p><a href="#">Show Completed</a></p>
+			</div>
+		);
+	}
+});
+
+var AddTodoField = React.createClass({
+	render: function() {
+		return (
+			<div className="AddTodoField">
+				<input ref="addTodo" type="text" placeholder="Add your task here"/>
 			</div>
 		);
 	}
@@ -39,12 +51,18 @@ var TodoItem = React.createClass({
 		}
 	},
 
+	handleChange: function() {
+		this.setState({
+			isDone: !this.state.isDone
+		});
+	},
+
 	render: function() {
 		var isDone = this.state.isDone ? "checked" : "";
 
 		return (
 			<div className="TodoItem">
-				<input id={this.props.id} type="checkbox" checked={isDone} />
+				<input id={this.props.id} type="checkbox" checked={isDone} onChange={this.handleChange} />
 				<label htmlFor={this.props.id}>{this.props.title}</label>
 			</div>
 		);
