@@ -34,10 +34,30 @@ var Todo = React.createClass({
 });
 
 var AddTodoField = React.createClass({
+	handleSubmit: function(event) {
+		if (event.key === 'Enter') {
+			var input = React.findDOMNode(this.refs.addTodo),
+					newTodo = React.findDOMNode(this.refs.addTodo).value;
+
+			$.ajax({
+				method: 'POST',
+				url: 'api/todo',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					"title": newTodo
+				}),
+				success: function() {
+					console.log( 'success' );
+					input.value = "";
+				}
+			});
+		}
+	},
+
 	render: function() {
 		return (
 			<div className="AddTodoField">
-				<input ref="addTodo" type="text" placeholder="Add your task here"/>
+				<input ref="addTodo" type="text" placeholder="Add your task here" onKeyPress={this.handleSubmit}/>
 			</div>
 		);
 	}
