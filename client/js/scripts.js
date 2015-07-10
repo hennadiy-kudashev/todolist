@@ -7,8 +7,25 @@ var Todo = React.createClass({
 		$.ajax({
 			url: 'api/todo',
 			contentType: 'application/json',
+			dataType: 'json',
 			success: function(data) {
 				this.setState({data: data});
+			}.bind(this)
+		});
+	},
+
+	todoAdd: function(newTodo) {
+		$.ajax({
+			method: 'POST',
+			url: 'api/todo',
+			contentType: 'application/json',
+			dataType: 'json',
+			data: JSON.stringify({
+				"title": newTodo
+			}),
+			success: function(newItem) {
+				this.state.data.push(newItem);
+				this.setState({data: this.state.data});
 			}.bind(this)
 		});
 	},
@@ -23,7 +40,7 @@ var Todo = React.createClass({
 		return (
 			<div className="Todo">
 				<h1>Todo List</h1>
-				<AddTodoField />
+				<AddTodoField onTodoAdd={this.todoAdd}/>
 				<div className="items">
 					{todoNodes}
 				</div>
@@ -39,18 +56,8 @@ var AddTodoField = React.createClass({
 			var input = React.findDOMNode(this.refs.addTodo),
 					newTodo = React.findDOMNode(this.refs.addTodo).value;
 
-			$.ajax({
-				method: 'POST',
-				url: 'api/todo',
-				contentType: 'application/json',
-				data: JSON.stringify({
-					"title": newTodo
-				}),
-				success: function() {
-					console.log( 'success' );
+					this.props.onTodoAdd(newTodo);
 					input.value = "";
-				}
-			});
 		}
 	},
 
