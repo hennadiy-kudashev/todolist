@@ -25,17 +25,18 @@ ItemRepository.prototype.getAll = function (resultCallback) {
 /**
  * Adds new Item entry to repository.
  * @param item {Item}
- * @param completeCallback function(error) which calls when operation is completed.
+ * @param completeCallback function(error, Item item) which calls when operation is completed.
  */
 ItemRepository.prototype.create = function (item, completeCallback) {
     this.queryWithParams(
-        'INSERT INTO dbo.Item(Title, IsDone) VALUES (@Title, @IsDone);',
+        'INSERT INTO dbo.Item(Title, IsDone) OUTPUT inserted.* VALUES (@Title, @IsDone);',
         [
             {name: 'Title', value: item.title},
             {name: 'IsDone', value: item.isDone}
         ],
         function (error, resultset) {
-            completeCallback(error);
+            var item  = resultset[0];
+            completeCallback(error, new Item(item.ID, item.Title, item.IsDone));
         });
 };
 

@@ -17,11 +17,11 @@ exports.redirect = function (router) {
             var Item = rootRequire('model/item');
             var item = new Item(undefined, payload.title, false);
 
-            itemRepository.create(item, function (error) {
+            itemRepository.create(item, function (error, item) {
                 if (error) {
                     response.status(500).send(error);
                 } else {
-                    response.status(204).end();
+                    response.status(201).json(item);
                 }
             });
         });

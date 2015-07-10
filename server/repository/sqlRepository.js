@@ -1,4 +1,4 @@
-var sql = require('mssql'); 
+var sql = require('mssql');
 
 var config = {
     user: '1gb_banzaj-ra',
@@ -7,7 +7,7 @@ var config = {
     database: '1gb_todo'
 };
 
-var SqlRepository = function(){
+var SqlRepository = function () {
 
 };
 
@@ -17,8 +17,8 @@ var SqlRepository = function(){
  * @param query sql query
  * @param resultCallback function(error, recordset)
  */
-SqlRepository.prototype.query = function(query, resultCallback){
-	this.queryWithParams(query, undefined, resultCallback);
+SqlRepository.prototype.query = function (query, resultCallback) {
+    this.queryWithParams(query, undefined, resultCallback);
 };
 
 /**
@@ -28,27 +28,31 @@ SqlRepository.prototype.query = function(query, resultCallback){
  * @param params [{name: '', value: ''}]
  * @param resultCallback function(error, recordset)
  */
-SqlRepository.prototype.queryWithParams = function(query, params, resultCallback){
-	sql.connect(config, function(err) {
-		if (err){
-			resultCallback(err);
-			return;
-		}
-		var request = new sql.Request();
-		if (params) {
-			params.forEach(function (param) {
-				request.input(param.name, param.value);
-			});
-		}
-		request.query(query, function(err, recordset) {
-			if (err){
-				resultCallback(err, recordset);
-				return;
-			}
-			console.log(recordset);
-			resultCallback(undefined, recordset);
-		});
-	});
+SqlRepository.prototype.queryWithParams = function (query, params, resultCallback) {
+    sql.connect(config, function (err) {
+        if (err) {
+            resultCallback(err);
+            return;
+        }
+        var request = new sql.Request();
+        if (params) {
+            params.forEach(function (param) {
+                request.input(param.name, param.value);
+            });
+        }
+        request.query(query, function (err, recordset) {
+            console.log({
+                query: query,
+                error: err,
+                result: recordset
+            });
+            if (err) {
+                resultCallback(err, recordset);
+                return;
+            }
+            resultCallback(undefined, recordset);
+        });
+    });
 };
 
 module.exports = SqlRepository;

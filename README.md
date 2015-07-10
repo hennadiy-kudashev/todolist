@@ -61,7 +61,12 @@ URI               | Method      | Type
     	"title": "The new goal for this week"
     }
 
-### Response 204
+### Response 201
+    {
+        "id":"58",
+        "title":"The new goal for this week",
+        "isDone":false
+    }
 
 ### Response 500
     {
