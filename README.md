@@ -5,7 +5,7 @@
 
 URI               | Method      | Type
 ----              | ----        | -----
-/api/todo | GET 		  | application/json
+/api/item | GET 		  | application/json
 
 ### Response 200
 
@@ -55,7 +55,7 @@ URI               | Method      | Type
 
 URI               | Method      | Type
 ----              | ----        | -----
-/api/todo | POST 		  | application/json
+/api/item | POST 		  | application/json
 
     {
     	"title": "The new goal for this week"
@@ -74,3 +74,44 @@ URI               | Method      | Type
         "message": "Login failed for user 'barada'.",
         "code": "ELOGIN"
     }
+
+## 3. Update existing item in TODO list.
+
+### Request
+
+URI               | Method      | Type
+----              | ----        | -----
+/api/item/{itemID} | PUT 		  | application/json
+
+    {
+    	"title": "The new goal for this week",
+    	"IsDone": true
+    }
+
+### Response 204    
+
+### Response 500
+    {
+        "name": "ConnectionError",
+        "message": "Login failed for user 'barada'.",
+        "code": "ELOGIN"
+    }
+
+
+## 4. Delete existing item from TODO list.
+
+### Request
+
+URI               | Method      | Type
+----              | ----        | -----
+/api/item/{itemID} | DELETE 		  | application/json
+
+### Response 204    
+
+### Response 500
+    {
+        "name": "ConnectionError",
+        "message": "Login failed for user 'barada'.",
+        "code": "ELOGIN"
+    }
+

@@ -5,7 +5,7 @@ var Todo = React.createClass({
 
 	componentDidMount: function() {
 		$.ajax({
-			url: 'api/todo',
+			url: 'api/item',
 			contentType: 'application/json',
 			dataType: 'json',
 			success: function(data) {
@@ -17,7 +17,7 @@ var Todo = React.createClass({
 	todoAdd: function(newTodo) {
 		$.ajax({
 			method: 'POST',
-			url: 'api/todo',
+			url: 'api/item',
 			contentType: 'application/json',
 			dataType: 'json',
 			data: JSON.stringify({
@@ -34,7 +34,7 @@ var Todo = React.createClass({
 		// template function to send PUT request
 		/*$.ajax({
 			method: 'PUT',
-			url: 'api/todo',
+			url: 'api/item',
 			contentType: 'application/json',
 			dataType: 'json',
 			data: JSON.stringify({

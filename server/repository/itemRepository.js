@@ -40,4 +40,38 @@ ItemRepository.prototype.create = function (item, completeCallback) {
         });
 };
 
+/**
+ * Updates existing Item entry in repository.
+ * @param item {Item}
+ * @param completeCallback function(error) which calls when operation is completed.
+ */
+ItemRepository.prototype.update = function (item, completeCallback) {
+    this.queryWithParams(
+        'UPDATE dbo.Item SET Title = @Title, IsDone = @IsDone WHERE ID = @ID;',
+        [
+            {name: 'ID', value: item.id},
+            {name: 'Title', value: item.title},
+            {name: 'IsDone', value: item.isDone}
+        ],
+        function (error, resultset) {
+            completeCallback(error);
+        });
+};
+
+/**
+ * Deletes existing Item entry from repository.
+ * @param itemID
+ * @param completeCallback function(error) which calls when operation is completed.
+ */
+ItemRepository.prototype.delete = function (itemID, completeCallback) {
+    this.queryWithParams(
+        'DELETE FROM dbo.Item WHERE ID = @ID;',
+        [
+            {name: 'ID', value: itemID}
+        ],
+        function (error, resultset) {
+            completeCallback(error);
+        });
+};
+
 module.exports = ItemRepository;
