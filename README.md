@@ -1,5 +1,5 @@
 # REST
-## 1. Get TODO list.
+## 1. Get TODO items.
 
 ### Request
 
