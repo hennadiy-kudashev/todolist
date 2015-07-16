@@ -31,21 +31,30 @@ var Todo = React.createClass({
 	},
 
 	todoChange: function(todoToChange) {
-		// template function to send PUT request
-		/*$.ajax({
-			method: 'PUT',
-			url: 'api/item',
-			contentType: 'application/json',
-			dataType: 'json',
-			data: JSON.stringify({
-				//"title": newTodo
-			}),
-			success: function(newItem) {
-				//this.state.data.push(newItem);
-				//this.setState({data: this.state.data});
-			}.bind(this)
-		});*/
-		console.log( todoToChange );
+		var url = '/api/item/' + todoToChange.id,
+				request = {
+					"title": todoToChange.title,
+					"isDone": todoToChange.isDone
+				};
+
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = ensureReadiness;
+
+		function ensureReadiness() {
+			if(xhr.readyState < 4) {
+					return;
+			}
+			if(xhr.status !== 200) {
+					return;
+			}
+			if(xhr.readyState === 4) {
+					console.log("works");
+			}
+		}
+
+		xhr.open('PUT', url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.send(JSON.stringify(request));
 	},
 
 	render: function() {
