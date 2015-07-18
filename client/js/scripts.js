@@ -5,9 +5,9 @@ var Todo = React.createClass({
 
 	componentDidMount: function() {
 		$.ajax({
-			url: 'api/item',
-			contentType: 'application/json',
-			dataType: 'json',
+			url: "api/item",
+			contentType: "application/json",
+			dataType: "json",
 			success: function(data) {
 				this.setState({data: data});
 			}.bind(this)
@@ -16,10 +16,10 @@ var Todo = React.createClass({
 
 	todoAdd: function(newTodo) {
 		$.ajax({
-			method: 'POST',
-			url: 'api/item',
-			contentType: 'application/json',
-			dataType: 'json',
+			method: "POST",
+			url: "api/item",
+			contentType: "application/json",
+			dataType: "json",
 			data: JSON.stringify({
 				"title": newTodo
 			}),
@@ -31,7 +31,7 @@ var Todo = React.createClass({
 	},
 
 	todoChange: function(todoToChange) {
-		var url = '/api/item/' + todoToChange.id,
+		var url = "/api/item/" + todoToChange.id,
 				request = {
 					"title": todoToChange.title,
 					"isDone": todoToChange.isDone
@@ -48,53 +48,36 @@ var Todo = React.createClass({
 					return;
 			}
 			if(xhr.readyState === 4) {
-					console.log("works");
+					console.log("success");
 			}
 		}
 
-		xhr.open('PUT', url, true);
+		xhr.open("PUT", url, true);
 		xhr.setRequestHeader("Content-Type", "application/json");
 		xhr.send(JSON.stringify(request));
 	},
 
 	todoRemove: function(todoToRemoveId){
-		var url = 'api/item/' + todoToRemoveId;
+		var url = "api/item/"  + todoToRemoveId;
 
 		$.ajax({
-			method: 'DELETE',
+			method: "DELETE",
 			url: url,
-			contentType: 'application/json',
-			dataType: 'json',
+			contentType: "application/json",
+			dataType: "json",
 			success: function() {
-				console.log( 'success' );
+				console.log( "success" );
 			}
 		});
 	},
 
 	render: function() {
-		var tasks = [],
-				unCompletedTasks;
-
-		this.state.data.forEach(function(item) {
-			if (item.isDone === false ) {
-				tasks.push(item);
-			};
-		});
-
-		unCompletedTasks = tasks.map(function(todo){
-			return(
-					<TodoItem id={todo.id} title={todo.title} isDone={todo.isDone} onTodoChange={this.todoChange} onTodoRemove={this.todoRemove}/>
-				);
-		}.bind(this));
-
 		return (
 			<div className="todo">
 				<h1>Todo List</h1>
 				<AddTodoField onTodoAdd={this.todoAdd}/>
-				<div className="items">
-					{unCompletedTasks}
-				</div>
-				<CompletedTasks data={this.state.data} todoRemove={this.todoRemove}/>
+				<UncompletedTasks data={this.state.data} todoRemove={this.todoRemove} todoChange={this.todoChange}/>
+				<CompletedTasks data={this.state.data} todoRemove={this.todoRemove} todoChange={this.todoChange}/>
 			</div>
 		);
 	}
@@ -102,7 +85,7 @@ var Todo = React.createClass({
 
 var AddTodoField = React.createClass({
 	handleSubmit: function(event) {
-		if (event.key === 'Enter') {
+		if (event.key === "Enter") {
 			var input = React.findDOMNode(this.refs.addTodo),
 					newTodo = React.findDOMNode(this.refs.addTodo).value;
 
@@ -165,6 +148,38 @@ var TodoItem = React.createClass({
 	}
 });
 
+var UncompletedTasks = React.createClass({
+	render: function() {
+
+		var tasks = [],
+				uncompletedTasks,
+				uncompletedLength;
+
+		this.props.data.forEach(function(item) {
+			if(item.isDone === false) {
+				tasks.push(item);
+			}
+		});
+
+		uncompletedTasks = tasks.map(function(todo){
+			return(
+					<TodoItem id={todo.id} title={todo.title} isDone={todo.isDone} onTodoRemove={this.props.todoRemove} onTodoChange={this.props.todoChange}/>
+				);
+		}.bind(this));
+
+		uncompletedLength = uncompletedTasks.length;
+
+		return (
+			<div className="uncompleted-tasks">
+				<p><span>{"Uncompleted tasks (" + uncompletedLength +")"}</span></p>
+				<div className="items">
+					{uncompletedTasks}
+				</div>
+			</div>
+		);
+	}
+});
+
 var CompletedTasks = React.createClass({
 	getInitialState: function() {
 		return {
@@ -184,6 +199,7 @@ var CompletedTasks = React.createClass({
 
 		var tasks = [],
 				completedTasks,
+				completedLength,
 				isShownCN;
 
 		this.props.data.forEach(function(item) {
@@ -194,15 +210,17 @@ var CompletedTasks = React.createClass({
 
 		completedTasks = tasks.map(function(todo){
 			return(
-					<TodoItem id={todo.id} title={todo.title} isDone={todo.isDone} onTodoRemove={this.props.todoRemove}/>
+					<TodoItem id={todo.id} title={todo.title} isDone={todo.isDone} onTodoRemove={this.props.todoRemove} onTodoChange={this.props.todoChange}/>
 				);
 		}.bind(this));
+
+		completedLength = completedTasks.length;
 
 		isShownCN = this.state.showCompleted ? " " : "hidden";
 
 		return (
 			<div className="completed-tasks">
-				<p><a href="#" onClick={this.handleClick}>Show Completed</a></p>
+				<p><a href="#" onClick={this.handleClick}>{"Show Completed (" +completedLength + ")" }</a></p>
 				<div className={"items " + isShownCN }>
 					{completedTasks}
 				</div>
@@ -211,4 +229,4 @@ var CompletedTasks = React.createClass({
 	}
 });
 
-React.render(<Todo />, document.getElementsByClassName('container')[0]);
+React.render(<Todo />, document.getElementsByClassName("container")[0]);

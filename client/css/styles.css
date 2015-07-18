@@ -153,6 +153,11 @@ input:checked + label::before {
 	content: '\f058'; /* circle checkmark */
 }
 
+.uncompleted-tasks p {
+  color: lightslategrey;
+  font-size: 12px;
+}
+
 .hidden {
   display: none;
 }
