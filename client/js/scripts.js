@@ -38,17 +38,25 @@ var Todo = React.createClass({
 				};
 
 		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = ensureReadiness;
+		xhr.onreadystatechange = ensureReadiness.bind(this);
 
 		function ensureReadiness() {
 			if(xhr.readyState < 4) {
 					return;
 			}
-			if(xhr.status !== 200) {
+
+			if(xhr.status !== 204) {
 					return;
 			}
+
 			if(xhr.readyState === 4) {
-					console.log("success");
+				this.state.data.forEach(function(item) {
+					if(item.id === todoToChange.id) {
+						item.isDone = todoToChange.isDone;
+					}
+				});
+
+				this.setState({data: this.state.data});
 			}
 		}
 
@@ -58,7 +66,7 @@ var Todo = React.createClass({
 	},
 
 	todoRemove: function(todoToRemoveId){
-		var url = "api/item/"  + todoToRemoveId;
+		var url = "api/item/" + todoToRemoveId;
 
 		$.ajax({
 			method: "DELETE",
@@ -67,6 +75,7 @@ var Todo = React.createClass({
 			dataType: "json",
 			success: function() {
 				console.log( "success" );
+				// TODO: change counter when item removed
 			}
 		});
 	},
@@ -112,9 +121,6 @@ var TodoItem = React.createClass({
 	},
 
 	handleChange: function() {
-		this.setState({
-			isDone: !this.state.isDone
-		});
 
 		var changedItem = { "id": this.props.id,
 												"title": this.props.title,
