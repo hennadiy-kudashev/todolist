@@ -74,9 +74,18 @@ var Todo = React.createClass({
 			contentType: "application/json",
 			dataType: "json",
 			success: function() {
-				console.log( "success" );
-				// TODO: change counter when item removed
-			}
+				var data = this.state.data;
+				data.forEach(function(item, index) {
+					if(item.id === todoToRemoveId) {
+						data.splice(index, 1)
+					}
+				});
+
+				this.setState({
+					data: data
+				});
+
+			}.bind(this)
 		});
 	},
 
@@ -115,8 +124,7 @@ var AddTodoField = React.createClass({
 var TodoItem = React.createClass({
 	getInitialState: function() {
 		return {
-			isDone: this.props.isDone,
-			isRemoved: false
+			isDone: this.props.isDone
 		}
 	},
 
@@ -134,18 +142,13 @@ var TodoItem = React.createClass({
 		e.preventDefault()
 		var removedItemId = this.props.id;
 		this.props.onTodoRemove(removedItemId);
-
-		this.setState({
-			isRemoved: true
-		});
 	},
 
 	render: function() {
-		var isDone = this.state.isDone ? "checked" : "",
-				isRemoved = this.state.isRemoved ? "hidden" : "";
+		var isDone = this.state.isDone ? "checked" : "";
 
 		return (
-			<div className={"todo-item " + isRemoved}>
+			<div className="todo-item">
 				<a href="#" className="remove-todo-item" onClick={this.handleRemove}>Remove</a>
 				<input id={this.props.id} type="checkbox" checked={isDone} onChange={this.handleChange} />
 				<label htmlFor={this.props.id}>{this.props.title}</label>
