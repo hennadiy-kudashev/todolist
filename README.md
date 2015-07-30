@@ -1,5 +1,5 @@
 # REST
-## 1. Get TODO items.
+## 1. Get TODO items..
 
 ### Request
 
@@ -88,7 +88,7 @@ URI               | Method      | Type
     	"IsDone": true
     }
 
-### Response 204    
+### Response 204
 
 ### Response 500
     {
@@ -106,7 +106,7 @@ URI               | Method      | Type
 ----              | ----        | -----
 /api/item/{itemID} | DELETE 		  | application/json
 
-### Response 204    
+### Response 204
 
 ### Response 500
     {
