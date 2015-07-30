@@ -8,34 +8,42 @@ ItemRepository.prototype = new SqlRepository();
 
 /**
  * Returns all items.
+ * @param userID user identifier
  * @param resultCallback function(error, Item[] items)
  */
-ItemRepository.prototype.getAll = function (resultCallback) {
-    this.query('SELECT ID, Title, IsDone FROM dbo.Item;', function (error, resultset) {
-        var resultArray = [];
-        if (resultset) {
-            resultset.forEach(function (item) {
-                resultArray.push(new Item(item.ID, item.Title, item.IsDone))
-            });
-        }
-        resultCallback(error, resultArray);
-    });
+ItemRepository.prototype.getAll = function (userID, resultCallback) {
+    this.queryWithParams(
+        'SELECT ID, Title, IsDone FROM dbo.Item WHERE UserID = @UserID;',
+        [
+            {name: 'UserID', value: userID}
+        ],
+        function (error, resultset) {
+            var resultArray = [];
+            if (resultset) {
+                resultset.forEach(function (item) {
+                    resultArray.push(new Item(item.ID, item.Title, item.IsDone))
+                });
+            }
+            resultCallback(error, resultArray);
+        });
 };
 
 /**
  * Adds new Item entry to repository.
+ * @param userID user identifier
  * @param item {Item}
  * @param completeCallback function(error, Item item) which calls when operation is completed.
  */
-ItemRepository.prototype.create = function (item, completeCallback) {
+ItemRepository.prototype.create = function (userID, item, completeCallback) {
     this.queryWithParams(
-        'INSERT INTO dbo.Item(Title, IsDone) OUTPUT inserted.* VALUES (@Title, @IsDone);',
+        'INSERT INTO dbo.Item(Title, IsDone, UserID) OUTPUT inserted.* VALUES (@Title, @IsDone, @UserID);',
         [
             {name: 'Title', value: item.title},
-            {name: 'IsDone', value: item.isDone}
+            {name: 'IsDone', value: item.isDone},
+            {name: 'UserID', value: userID}
         ],
         function (error, resultset) {
-            var item  = resultset[0];
+            var item = resultset[0];
             completeCallback(error, new Item(item.ID, item.Title, item.IsDone));
         });
 };

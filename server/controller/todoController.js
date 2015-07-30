@@ -5,7 +5,8 @@ var Item = rootRequire('model/item');
 exports.redirect = function (router) {
     router.route('/item')
         .get(function (request, response) {
-            itemRepository.getAll(function (error, items) {
+            var userID = request.cookies.userID;
+            itemRepository.getAll(userID, function (error, items) {
                 if (error) {
                     response.status(500).send(error);
                 } else {
@@ -16,7 +17,8 @@ exports.redirect = function (router) {
         .post(function (request, response) {
             var payload = request.body;
             var item = new Item(undefined, payload.title, false);
-            itemRepository.create(item, function (error, item) {
+            var userID = request.cookies.userID;
+            itemRepository.create(userID, item, function (error, item) {
                 if (error) {
                     response.status(500).send(error);
                 } else {

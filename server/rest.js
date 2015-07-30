@@ -8,6 +8,11 @@ exports.register = function (app) {
         if (!req.accepts('json')) {
             return res.status(406).end();
         }
+        console.log(['cookie', req.cookies]);
+        if (!req.cookies.userID){
+            var uuid = require('node-uuid');
+            res.cookie('userID', uuid.v1());
+        }
         res.contentType('application/json');
         next();
     });
